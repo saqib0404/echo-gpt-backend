@@ -26,7 +26,13 @@ export const environmentValidationSchema = Joi.object({
     .default('http://localhost:3000'),
 
   LOG_LEVEL: Joi.string()
-    .valid('error', 'warn', 'log', 'debug', 'verbose')
+    .valid(
+      'error',
+      'warn',
+      'log',
+      'debug',
+      'verbose',
+    )
     .default('debug'),
 
   THROTTLE_TTL: Joi.number()
@@ -46,4 +52,22 @@ export const environmentValidationSchema = Joi.object({
   DIRECT_DATABASE_URL: Joi.string()
     .uri()
     .required(),
+
+  JWT_ACCESS_SECRET: Joi.string()
+    .min(32)
+    .required(),
+
+  JWT_REFRESH_SECRET: Joi.string()
+    .min(32)
+    .required(),
+
+  JWT_ACCESS_TTL: Joi.number()
+    .integer()
+    .positive()
+    .default(900),
+
+  JWT_REFRESH_TTL: Joi.number()
+    .integer()
+    .positive()
+    .default(604800),
 });

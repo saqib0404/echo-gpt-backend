@@ -13,24 +13,34 @@ import databaseConfig from './config/database.config.js';
 import { environmentValidationSchema } from './config/validation.schema.js';
 import { DatabaseModule } from './database/database.module.js';
 import { HealthModule } from './modules/health/health.module.js';
+import authConfig from './config/auth.config.js';
+import { AuthModule } from './modules/auth/auth.module.js';
+import { UsersModule } from './modules/users/users.module.js';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,
+
       load: [
         appConfig,
         databaseConfig,
+        authConfig,
       ],
-      validationSchema: environmentValidationSchema,
+
+      validationSchema:
+        environmentValidationSchema,
+
       validationOptions: {
         // abortEarly: false,
       },
     }),
 
     ThrottlerModule.forRootAsync({
-      inject: [ConfigService],
+      inject: [
+        ConfigService,
+      ],
 
       useFactory: (
         configService: ConfigService,
@@ -52,6 +62,10 @@ import { HealthModule } from './modules/health/health.module.js';
     }),
 
     DatabaseModule,
+
+    AuthModule,
+
+    UsersModule,
 
     HealthModule,
   ],
