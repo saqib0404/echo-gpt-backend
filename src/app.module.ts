@@ -16,6 +16,7 @@ import { HealthModule } from './modules/health/health.module.js';
 import authConfig from './config/auth.config.js';
 import { AuthModule } from './modules/auth/auth.module.js';
 import { UsersModule } from './modules/users/users.module.js';
+import { SubscriptionsModule } from './modules/subscriptions/subscriptions.module.js';
 
 @Module({
   imports: [
@@ -66,6 +67,8 @@ import { UsersModule } from './modules/users/users.module.js';
     AuthModule,
 
     UsersModule,
+
+    SubscriptionsModule,
 
     HealthModule,
   ],
