@@ -17,6 +17,8 @@ import authConfig from './config/auth.config.js';
 import { AuthModule } from './modules/auth/auth.module.js';
 import { UsersModule } from './modules/users/users.module.js';
 import { SubscriptionsModule } from './modules/subscriptions/subscriptions.module.js';
+import providerConfig from './config/provider.config.js';
+import { AiProvidersModule } from './modules/ai-providers/ai-providers.module.js';
 
 @Module({
   imports: [
@@ -28,6 +30,7 @@ import { SubscriptionsModule } from './modules/subscriptions/subscriptions.modul
         appConfig,
         databaseConfig,
         authConfig,
+        providerConfig,
       ],
 
       validationSchema:
@@ -69,6 +72,8 @@ import { SubscriptionsModule } from './modules/subscriptions/subscriptions.modul
     UsersModule,
 
     SubscriptionsModule,
+
+    AiProvidersModule,
 
     HealthModule,
   ],
