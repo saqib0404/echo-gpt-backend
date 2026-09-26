@@ -19,6 +19,7 @@ import { UsersModule } from './modules/users/users.module.js';
 import { SubscriptionsModule } from './modules/subscriptions/subscriptions.module.js';
 import providerConfig from './config/provider.config.js';
 import { AiProvidersModule } from './modules/ai-providers/ai-providers.module.js';
+import { ChatModule } from './modules/chat/chat.module.js';
 
 @Module({
   imports: [
@@ -74,6 +75,8 @@ import { AiProvidersModule } from './modules/ai-providers/ai-providers.module.js
     SubscriptionsModule,
 
     AiProvidersModule,
+
+    ChatModule,
 
     HealthModule,
   ],

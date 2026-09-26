@@ -15,6 +15,15 @@ import { ProviderRegistryService } from './adapters/provider-registry.service.js
 import { CreateAiProviderDto } from './dto/create-ai-provider.dto.js';
 import { UpdateAiProviderDto } from './dto/update-ai-provider.dto.js';
 
+export interface ResolvedAiProvider {
+  id: string;
+  type: AiProviderType;
+  name: string;
+  baseUrl: string;
+  model: string;
+  apiKey: string;
+}
+
 @Injectable()
 export class AiProvidersService {
   constructor(
@@ -71,7 +80,6 @@ export class AiProvidersService {
           encryptedApiKey,
 
           enabled: false,
-
           isDefault: false,
 
           healthStatus:
@@ -94,10 +102,11 @@ export class AiProvidersService {
 
     return {
       providers:
-        providers.map((provider) =>
-          this.toPublicProvider(
-            provider,
-          ),
+        providers.map(
+          (provider) =>
+            this.toPublicProvider(
+              provider,
+            ),
         ),
     };
   }
@@ -179,7 +188,6 @@ export class AiProvidersService {
                   null,
 
                 enabled: false,
-
                 isDefault: false,
 
                 healthStatus:
@@ -338,7 +346,6 @@ export class AiProvidersService {
 
         health: {
           healthy: false,
-
           message:
             'API key is not configured',
         },
@@ -385,9 +392,72 @@ export class AiProvidersService {
 
     return {
       provider:
-        this.toPublicProvider(updated),
+        this.toPublicProvider(
+          updated,
+        ),
 
       health,
+    };
+  }
+
+  async resolveForChat(
+    providerId?: string,
+  ): Promise<ResolvedAiProvider> {
+    const provider =
+      providerId
+        ? await this.prisma.aiProvider
+            .findFirst({
+              where: {
+                id: providerId,
+                enabled: true,
+              },
+            })
+        : await this.prisma.aiProvider
+            .findFirst({
+              where: {
+                enabled: true,
+                isDefault: true,
+              },
+            });
+
+    if (!provider) {
+      throw new BadRequestException(
+        providerId
+          ? 'Selected AI provider is unavailable or disabled'
+          : 'No enabled default AI provider is configured',
+      );
+    }
+
+    if (!provider.encryptedApiKey) {
+      throw new BadRequestException(
+        'Selected AI provider does not have an API key configured',
+      );
+    }
+
+    if (!provider.defaultModel) {
+      throw new BadRequestException(
+        'Selected AI provider does not have a default model configured',
+      );
+    }
+
+    return {
+      id: provider.id,
+      type: provider.type,
+      name: provider.name,
+
+      baseUrl:
+        provider.baseUrl ??
+        this.getDefaultBaseUrl(
+          provider.type,
+        ),
+
+      model:
+        provider.defaultModel,
+
+      apiKey:
+        this.encryptionService.decrypt(
+          provider.encryptedApiKey,
+        ),
     };
   }
 
@@ -431,8 +501,10 @@ export class AiProvidersService {
       type: AiProviderType;
       name: string;
       baseUrl: string | null;
-      encryptedApiKey: string | null;
-      defaultModel: string | null;
+      encryptedApiKey:
+        string | null;
+      defaultModel:
+        string | null;
       enabled: boolean;
       isDefault: boolean;
       healthStatus:
@@ -452,7 +524,8 @@ export class AiProvidersService {
       defaultModel:
         provider.defaultModel,
 
-      enabled: provider.enabled,
+      enabled:
+        provider.enabled,
 
       isDefault:
         provider.isDefault,
