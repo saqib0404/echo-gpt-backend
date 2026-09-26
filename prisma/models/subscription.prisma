@@ -1,0 +1,43 @@
+enum PlanCode {
+  FREE
+  PREMIUM
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELED
+  EXPIRED
+}
+
+model Plan {
+  id                  String   @id @default(uuid()) @db.Uuid
+  code                PlanCode @unique
+  name                String   @db.VarChar(100)
+  description         String?
+  monthlyRequestLimit Int
+  isActive            Boolean  @default(true)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  subscriptions Subscription[]
+}
+
+model Subscription {
+  id         String             @id @default(uuid()) @db.Uuid
+  userId     String             @db.Uuid
+  planId     String             @db.Uuid
+  status     SubscriptionStatus @default(ACTIVE)
+  startsAt   DateTime           @default(now())
+  endsAt     DateTime?
+  canceledAt DateTime?
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan Plan @relation(fields: [planId], references: [id], onDelete: Restrict)
+
+  @@index([userId])
+  @@index([planId])
+  @@index([status])
+  @@index([userId, status])
+}

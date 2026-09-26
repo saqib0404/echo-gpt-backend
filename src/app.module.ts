@@ -1,21 +1,28 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import {
+  ConfigModule,
+  ConfigService,
+} from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import {
   ThrottlerGuard,
   ThrottlerModule,
 } from '@nestjs/throttler';
 import appConfig from './config/app.config.js';
+import databaseConfig from './config/database.config.js';
 import { environmentValidationSchema } from './config/validation.schema.js';
+import { DatabaseModule } from './database/database.module.js';
 import { HealthModule } from './modules/health/health.module.js';
-
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,
-      load: [appConfig],
+      load: [
+        appConfig,
+        databaseConfig,
+      ],
       validationSchema: environmentValidationSchema,
       validationOptions: {
         // abortEarly: false,
@@ -24,7 +31,10 @@ import { HealthModule } from './modules/health/health.module.js';
 
     ThrottlerModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
+
+      useFactory: (
+        configService: ConfigService,
+      ) => ({
         throttlers: [
           {
             ttl:
@@ -40,6 +50,8 @@ import { HealthModule } from './modules/health/health.module.js';
         ],
       }),
     }),
+
+    DatabaseModule,
 
     HealthModule,
   ],

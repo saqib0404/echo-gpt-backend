@@ -1,0 +1,32 @@
+enum AiProviderType {
+  OPENAI
+  ANTHROPIC
+  GEMINI
+}
+
+enum ProviderHealthStatus {
+  UNKNOWN
+  HEALTHY
+  UNHEALTHY
+}
+
+model AiProvider {
+  id                String               @id @default(uuid()) @db.Uuid
+  type              AiProviderType       @unique
+  name              String               @db.VarChar(100)
+  baseUrl           String?
+  encryptedApiKey   String?
+  defaultModel      String?              @db.VarChar(150)
+  enabled           Boolean              @default(false)
+  isDefault         Boolean              @default(false)
+  healthStatus      ProviderHealthStatus @default(UNKNOWN)
+  lastHealthCheckAt DateTime?
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+
+  conversations Conversation[]
+  apiUsageLogs  ApiUsageLog[]
+
+  @@index([enabled])
+  @@index([isDefault])
+}

@@ -38,4 +38,12 @@ export const environmentValidationSchema = Joi.object({
     .integer()
     .positive()
     .default(100),
+
+  DATABASE_URL: Joi.string()
+    .uri()
+    .required(),
+
+  DIRECT_DATABASE_URL: Joi.string()
+    .uri()
+    .required(),
 });

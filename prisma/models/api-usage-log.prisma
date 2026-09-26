@@ -1,0 +1,30 @@
+enum UsageType {
+  CHAT
+  WEB_SEARCH
+}
+
+model ApiUsageLog {
+  id             String    @id @default(uuid()) @db.Uuid
+  userId         String    @db.Uuid
+  providerId     String?   @db.Uuid
+  conversationId String?   @db.Uuid
+  type           UsageType
+  endpoint       String    @db.VarChar(255)
+  statusCode     Int
+  durationMs     Int?
+  promptTokens   Int?
+  outputTokens   Int?
+  totalTokens    Int?
+  createdAt      DateTime  @default(now())
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider     AiProvider?   @relation(fields: [providerId], references: [id], onDelete: SetNull)
+  conversation Conversation? @relation(fields: [conversationId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([providerId])
+  @@index([conversationId])
+  @@index([type])
+  @@index([createdAt])
+  @@index([userId, createdAt])
+}
