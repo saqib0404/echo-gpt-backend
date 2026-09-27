@@ -80,7 +80,22 @@ export const environmentValidationSchema =
       .positive()
       .default(604800),
 
-    PROVIDER_ENCRYPTION_KEY: Joi.string()
-      .base64()
-      .required(),
+    PROVIDER_ENCRYPTION_KEY:
+      Joi.string()
+        .base64()
+        .required(),
+
+    SEARCH_CACHE_TTL_SECONDS:
+      Joi.number()
+        .integer()
+        .min(60)
+        .max(86400)
+        .default(900),
+
+    SEARCH_MAX_RESULTS:
+      Joi.number()
+        .integer()
+        .min(1)
+        .max(25)
+        .default(10),
   });

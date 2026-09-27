@@ -20,6 +20,8 @@ import { SubscriptionsModule } from './modules/subscriptions/subscriptions.modul
 import providerConfig from './config/provider.config.js';
 import { AiProvidersModule } from './modules/ai-providers/ai-providers.module.js';
 import { ChatModule } from './modules/chat/chat.module.js';
+import searchConfig from './config/search.config.js';
+import { WebSearchModule } from './modules/web-search/web-search.module.js';
 
 @Module({
   imports: [
@@ -32,6 +34,7 @@ import { ChatModule } from './modules/chat/chat.module.js';
         databaseConfig,
         authConfig,
         providerConfig,
+        searchConfig,
       ],
 
       validationSchema:
@@ -77,6 +80,8 @@ import { ChatModule } from './modules/chat/chat.module.js';
     AiProvidersModule,
 
     ChatModule,
+
+    WebSearchModule,
 
     HealthModule,
   ],
