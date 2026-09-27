@@ -22,6 +22,7 @@ import { AiProvidersModule } from './modules/ai-providers/ai-providers.module.js
 import { ChatModule } from './modules/chat/chat.module.js';
 import searchConfig from './config/search.config.js';
 import { WebSearchModule } from './modules/web-search/web-search.module.js';
+import { AdminModule } from './modules/admin/admin.module.js';
 
 @Module({
   imports: [
@@ -82,6 +83,8 @@ import { WebSearchModule } from './modules/web-search/web-search.module.js';
     ChatModule,
 
     WebSearchModule,
+
+    AdminModule,
 
     HealthModule,
   ],

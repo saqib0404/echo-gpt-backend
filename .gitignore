@@ -34,3 +34,4 @@ Thumbs.db
 
 # Prisma generated client - added later
 src/generated/
+/src/generated/prisma
