@@ -1,0 +1,20 @@
+services:
+
+  echogpt-api:
+
+    container_name:
+      echogpt-backend
+
+    build:
+      context: .
+
+    ports:
+      - "3000:3000"
+
+
+    env_file:
+      - .env
+
+
+    restart:
+      unless-stopped
