@@ -1,7 +1,7 @@
 # EchoGPT Backend
 
-[*Live Health*](#https://echo-gpt-backend.onrender.com/api/v1/health) <br>
-[*Swagger documentation*](#https://echo-gpt-backend.onrender.com/docs)
+[Live Health](https://echo-gpt-backend.onrender.com/api/v1/health) <br>
+[Swagger documentation](https://echo-gpt-backend.onrender.com/docs)
 
 
 A production-ready AI conversational backend built with **NestJS**, **PostgreSQL**, **Prisma ORM**, **JWT Authentication**, **Docker**, and **Cloud Deployment**.
